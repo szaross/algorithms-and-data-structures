@@ -1,9 +1,18 @@
+from graph_module import generate_random_graph, visualize_graph
 from collections import deque
+from networkx import eulerian_circuit as ec
+from networkx import is_eulerian
 
 
 # adjacency list
-def dfs(G):
+def eulerian_circuit(G):
     n = len(G)
+
+    # check if it has an eulerian circuit
+    for v in range(n):
+        if len(G[v]) % 2 == 1:
+            return "G doesn't have an Eulerian circuit"
+
     visited = [False for _ in range(n)]
     parent = [None for _ in range(n)]
     path = []
@@ -33,15 +42,11 @@ def dfs(G):
     return res
 
 
-# G = [[1, 2], [0, 3], [0, 3], [1, 2, 4, 5], [3, 5], [3, 4]]
-G = [
-    [1, 2],
-    [0, 3, 2, 4, 5, 6],
-    [0, 3, 6, 1, 4, 5],
-    [1, 2, 4, 5],
-    [3, 5, 1, 2],
-    [3, 4, 1, 2],
-    [1, 2],
-]
-print(dfs(G))
-
+n = 5
+G, A = generate_random_graph(n, 0.6)
+print(eulerian_circuit(A))
+if is_eulerian(G):
+    print(list(ec(G)))
+else:
+    print("G is not Eulerian")
+visualize_graph(G)
